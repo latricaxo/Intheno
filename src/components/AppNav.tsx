@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 import { LoginArea } from '@/components/auth/LoginArea';
 import { useCurrentUser } from '@/hooks/useCurrentUser';
 import { Menu, X, Search, BookOpen, Users, PenLine, Compass, HelpCircle, Heart } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 const NAV_LINKS = [
   { href: '/explore', label: 'Explore', icon: Compass },
