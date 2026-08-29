@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useSeoMeta } from '@unhead/react';
 import { AppNav } from '@/components/AppNav';
-import { Bitcoin, Copy, Check, Heart } from 'lucide-react';
+import { Copy, Check, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const BITCOIN_ADDRESS = 'bc1qjzmz6dpxn333levddqgum7p8l683tc9lhsfhmf';
@@ -46,7 +46,7 @@ export default function SupportPage() {
         {/* Bitcoin card */}
         <div className="rounded-2xl border border-border bg-card overflow-hidden shadow-sm mb-8">
           <div className="flex items-center gap-2.5 px-5 py-3 border-b border-border bg-secondary/30">
-            <Bitcoin className="w-4 h-4 text-amber-500" />
+            <Heart className="w-4 h-4 text-amber-500" />
             <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
               Bitcoin Address
             </span>

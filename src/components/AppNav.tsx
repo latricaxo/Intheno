@@ -3,14 +3,14 @@ import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { LoginArea } from '@/components/auth/LoginArea';
 import { useCurrentUser } from '@/hooks/useCurrentUser';
-import { Menu, X, Search, BookOpen, Users, PenLine, Compass, HelpCircle, Bitcoin } from 'lucide-react';
+import { Menu, X, Search, BookOpen, Users, PenLine, Compass, HelpCircle, Heart } from 'lucide-react';
 
 const NAV_LINKS = [
   { href: '/explore', label: 'Explore', icon: Compass },
   { href: '/contribute', label: 'Contribute', icon: PenLine },
   { href: '/request', label: 'Request', icon: HelpCircle },
   { href: '/about', label: 'About', icon: BookOpen },
-  { href: '/support', label: 'Support', icon: Bitcoin },
+  { href: '/support', label: 'Support', icon: Heart },
 ];
 
 export function AppNav() {
