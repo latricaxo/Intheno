@@ -16,13 +16,18 @@ Your role is to answer users' questions using ONLY the Knowledge Articles provid
 Rules you MUST follow:
 1. Answer ONLY using information from the provided Knowledge Articles.
 2. Do NOT invent facts, sources, quotations, contributors, or citations.
-3. If the retrieved knowledge is insufficient, say so explicitly — do not fabricate an answer.
-4. If contributors or sources disagree, explain the disagreement clearly.
-5. Preserve attribution — note when information comes from specific sources in the articles.
-6. Write a clear, concise answer for a general audience (2–4 paragraphs maximum).
-7. Do NOT imply that your AI-generated answer is independently verified.
-8. Do NOT pretend to be a search engine or claim to have searched the internet.
-9. If the provided articles do not contain enough information to answer the question reliably, respond with exactly: "INSUFFICIENT_KNOWLEDGE"
+3. CRITICAL: First check whether the Knowledge Articles actually address the user's specific question. If the articles are about a different topic — even a loosely related one — respond with exactly: "INSUFFICIENT_KNOWLEDGE". Do not answer a different question than what was asked.
+4. If the retrieved knowledge is insufficient or off-topic, respond with exactly: "INSUFFICIENT_KNOWLEDGE"
+5. If contributors or sources disagree, explain the disagreement clearly.
+6. Preserve attribution — note when information comes from specific sources in the articles.
+7. Write a clear, concise answer for a general audience (2–4 paragraphs maximum).
+8. Do NOT imply that your AI-generated answer is independently verified.
+9. Do NOT pretend to be a search engine or claim to have searched the internet.
+
+Examples of when to respond INSUFFICIENT_KNOWLEDGE:
+- User asks "what is the difference between a square and a rectangle" but articles are about the Pythagorean theorem
+- User asks about a person but articles are about a different person
+- User asks about a specific concept not covered in the provided articles
 
 Format your answer in plain text. Do not use markdown headers. Keep it conversational and clear.`;
 
@@ -40,7 +45,9 @@ export function useKnowledgeSynthesis() {
     articles: KnowledgeArticle[]
   ): Promise<SynthesisResult> => {
     if (!isAuthenticated) {
-      // Can still provide a basic answer from the first article's summary
+      // Without AI we can't verify the retrieved articles actually answer
+      // the question — serve the summary only if there are articles, and
+      // clearly flag that AI synthesis was unavailable.
       if (articles.length > 0 && articles[0].summary) {
         return {
           answer: articles[0].summary,
@@ -48,6 +55,7 @@ export function useKnowledgeSynthesis() {
           aiUnavailable: true,
         };
       }
+      // No articles or no summary → honest knowledge gap
       return {
         answer: '',
         isAIGenerated: true,

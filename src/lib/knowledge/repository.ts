@@ -33,9 +33,22 @@ export function normalizeToSubject(text: string): string {
     .replace(/^-|-$/g, '');  // strip leading/trailing hyphens
 }
 
+// Common words that should not drive relevance on their own
+const STOP_WORDS = new Set([
+  'the', 'is', 'are', 'was', 'were', 'a', 'an', 'and', 'or', 'but', 'in',
+  'on', 'at', 'to', 'for', 'of', 'with', 'by', 'from', 'as', 'it', 'its',
+  'this', 'that', 'what', 'how', 'why', 'when', 'where', 'who', 'which',
+  'does', 'do', 'did', 'have', 'has', 'had', 'be', 'been', 'being',
+  'between', 'difference', 'differences', 'compare', 'comparison',
+]);
+
 /**
  * Score how relevant an article is to a query.
  * Higher = more relevant.
+ *
+ * IMPORTANT: An article only qualifies if it has meaningful overlap with the
+ * query's core topic words in its title, subject, question, or tags.
+ * Incidental word matches in body content alone do NOT qualify an article.
  */
 function scoreArticle(article: KnowledgeArticle, query: string, terms: string[]): number {
   let score = 0;
@@ -43,32 +56,45 @@ function scoreArticle(article: KnowledgeArticle, query: string, terms: string[])
   const title = article.title.toLowerCase();
   const subject = article.subject.toLowerCase();
   const questionLower = (article.question ?? '').toLowerCase();
-  const contentLower = article.content.toLowerCase();
   const tagsLower = article.tags.map(t => t.toLowerCase());
   const summaryLower = (article.summary ?? '').toLowerCase();
+  const contentLower = article.content.toLowerCase();
 
-  // Exact matches score highest
+  // Exact whole-query matches score highest
   if (title === q) score += 100;
   if (subject === normalizeToSubject(query)) score += 80;
   if (questionLower === q || questionLower === q + '?') score += 90;
 
-  // Partial title/question matches
+  // Partial whole-query matches in title/question
   if (title.includes(q)) score += 40;
   if (questionLower.includes(q)) score += 35;
   if (summaryLower.includes(q)) score += 20;
 
-  // Term-by-term matching
-  for (const term of terms) {
-    if (term.length < 3) continue;
-    if (title.includes(term)) score += 15;
-    if (questionLower.includes(term)) score += 12;
-    if (tagsLower.some(t => t.includes(term))) score += 10;
-    if (summaryLower.includes(term)) score += 8;
-    if (contentLower.includes(term)) score += 4;
+  // Filter to meaningful terms only (no stop words, min 3 chars)
+  const meaningfulTerms = terms.filter(t => t.length >= 3 && !STOP_WORDS.has(t));
+
+  // Term-by-term matching in high-signal fields
+  let topicFieldHits = 0; // hits in title, question, or tags
+  for (const term of meaningfulTerms) {
+    if (title.includes(term)) { score += 15; topicFieldHits++; }
+    if (questionLower.includes(term)) { score += 12; topicFieldHits++; }
+    if (tagsLower.some(t => t.includes(term))) { score += 10; topicFieldHits++; }
+    if (summaryLower.includes(term)) score += 6;
+    if (contentLower.includes(term)) score += 2; // content alone is very weak signal
+  }
+
+  // If there are meaningful terms but NONE appear in title/question/tags,
+  // this article is not actually about the topic — disqualify it.
+  if (meaningfulTerms.length > 0 && topicFieldHits === 0 && score <= 4) {
+    return 0;
   }
 
   return score;
 }
+
+// Minimum score for an article to appear in results.
+// This prevents tangential word matches from surfacing irrelevant articles.
+const MIN_RELEVANCE_SCORE = 12;
 
 /**
  * LocalKnowledgeRepository — backed by demo seed data.
@@ -102,7 +128,7 @@ export class LocalKnowledgeRepository implements KnowledgeRepository {
 
     const scored = candidates
       .map(a => ({ article: a, score: scoreArticle(a, q, terms) }))
-      .filter(s => s.score > 0)
+      .filter(s => s.score >= MIN_RELEVANCE_SCORE)
       .sort((a, b) => b.score - a.score)
       .slice(0, limit);
 

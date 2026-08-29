@@ -59,7 +59,9 @@ export default function Index() {
             What do you want to know?
           </p>
           <p className="text-sm text-muted-foreground/70 max-w-xs mx-auto">
-            Open knowledge. Human contributions. Traceable answers.
+            Open knowledge. Human contributions.{' '}
+            <br />
+            Traceable answers.
           </p>
         </div>
 

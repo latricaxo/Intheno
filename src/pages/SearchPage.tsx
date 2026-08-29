@@ -6,6 +6,8 @@ import { AppNav } from '@/components/AppNav';
 import { KnowledgeCard } from '@/components/KnowledgeCard';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, AlertTriangle, Wifi, PenLine, HelpCircle } from 'lucide-react';
+import { useCurrentUser } from '@/hooks/useCurrentUser';
+import { LoginArea } from '@/components/auth/LoginArea';
 import { useKnowledgeSynthesis } from '@/hooks/useKnowledgeSynthesis';
 import { useNostrKnowledgeRepo } from '@/hooks/useNostrKnowledge';
 import type { KnowledgeSearchResult } from '@/lib/knowledge/types';
@@ -187,22 +189,19 @@ export default function SearchPage() {
 
 function KnowledgeGapState({ question }: { question: string }) {
   const navigate = useNavigate();
+  const { user } = useCurrentUser();
 
   return (
     <div className="space-y-4">
-      <div className="rounded-2xl border border-dashed border-border bg-card p-8 text-center">
-        <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center mx-auto mb-4">
+      <div className="rounded-2xl border border-dashed border-border bg-card px-8 py-10 text-center">
+        <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center mx-auto mb-5">
           <HelpCircle className="h-6 w-6 text-muted-foreground" />
         </div>
-        <h2 className="text-lg font-semibold text-foreground mb-2">Knowledge Gap</h2>
-        <p className="text-muted-foreground text-sm mb-1 max-w-md mx-auto">
-          We don't have enough contributed knowledge to answer{' '}
-          <em className="text-foreground not-italic font-medium">"{question}"</em>{' '}
-          reliably yet.
+
+        <p className="text-base font-medium text-foreground max-w-sm mx-auto leading-relaxed mb-6">
+          We don't have the knowledge preserved here yet. Contribute now to keep knowledge open and traceable.
         </p>
-        <p className="text-muted-foreground/70 text-xs mb-6">
-          This is a successful state — it means the knowledge network is growing.
-        </p>
+
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Button
             onClick={() => navigate(`/contribute?topic=${encodeURIComponent(question)}`)}
@@ -212,6 +211,11 @@ function KnowledgeGapState({ question }: { question: string }) {
             <PenLine className="h-4 w-4 mr-2" />
             Contribute Knowledge
           </Button>
+
+          {!user && (
+            <LoginArea className="w-full sm:w-auto" />
+          )}
+
           <Button
             variant="outline"
             onClick={() => navigate(`/request?q=${encodeURIComponent(question)}`)}

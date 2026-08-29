@@ -11,6 +11,7 @@ import ContributorPage from "./pages/ContributorPage";
 import KnowledgeDetailPage from "./pages/KnowledgeDetailPage";
 import RequestPage from "./pages/RequestPage";
 import AboutPage from "./pages/AboutPage";
+import SupportPage from "./pages/SupportPage";
 import { NIP19Page } from "./pages/NIP19Page";
 import NotFound from "./pages/NotFound";
 
@@ -29,6 +30,7 @@ export function AppRouter() {
         <Route path="/contributor/:npub" element={<ContributorPage />} />
         <Route path="/request" element={<RequestPage />} />
         <Route path="/about" element={<AboutPage />} />
+        <Route path="/support" element={<SupportPage />} />
         {/* NIP-19 route for npub1, note1, naddr1, nevent1, nprofile1 */}
         <Route path="/:nip19" element={<NIP19Page />} />
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
