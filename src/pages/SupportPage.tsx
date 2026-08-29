@@ -4,7 +4,7 @@ import { AppNav } from '@/components/AppNav';
 import { Copy, Check, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-const BITCOIN_ADDRESS = 'bc1qjzmz6dpxn333levddqgum7p8l683tc9lhsfhmf';
+const BITCOIN_ADDRESS = 'bc1qa6rs2mseaxwhspgg70m005gvck45jcdgxar9pt';
 
 export default function SupportPage() {
   const [copied, setCopied] = useState(false);
