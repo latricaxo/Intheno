@@ -6,8 +6,7 @@ import { AppNav } from '@/components/AppNav';
 import { KnowledgeCard } from '@/components/KnowledgeCard';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, AlertTriangle, Wifi, PenLine, HelpCircle } from 'lucide-react';
-import { useCurrentUser } from '@/hooks/useCurrentUser';
-import { LoginArea } from '@/components/auth/LoginArea';
+
 import { useKnowledgeSynthesis } from '@/hooks/useKnowledgeSynthesis';
 import { useNostrKnowledgeRepo } from '@/hooks/useNostrKnowledge';
 import type { KnowledgeSearchResult } from '@/lib/knowledge/types';
@@ -189,7 +188,6 @@ export default function SearchPage() {
 
 function KnowledgeGapState({ question }: { question: string }) {
   const navigate = useNavigate();
-  const { user } = useCurrentUser();
 
   return (
     <div className="space-y-4">
@@ -211,10 +209,6 @@ function KnowledgeGapState({ question }: { question: string }) {
             <PenLine className="h-4 w-4 mr-2" />
             Contribute Knowledge
           </Button>
-
-          {!user && (
-            <LoginArea className="w-full sm:w-auto" />
-          )}
 
           <Button
             variant="outline"
