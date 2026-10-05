@@ -4,6 +4,10 @@ An open-source knowledge network on Nostr. Ask a question and get an answer draw
 
 **Live app:** https://intheno.shakespeare.wtf
 
+## Why INTHENO
+
+Publishing on open networks does not make information easy to find, understand, or verify. Nostr provides decentralized publishing and NIP-54 defines knowledge articles, but people still need a way to ask a plain question and trace the result to its authors and sources. INTHENO adds that layer, using existing standards and no new protocol.
+
 ## Status
 
 INTHENO is a working prototype. It currently runs on clearly labeled demonstration articles stored in the app. The next stage is to replace them with 100 sourced NIP-54 articles published on Nostr relays, add expert review, build multi-relay retrieval, and measure the results publicly.
@@ -13,10 +17,14 @@ INTHENO is a working prototype. It currently runs on clearly labeled demonstrati
 - Anyone can ask a question and read sourced results without an account.
 - Publishes and reads NIP-54 knowledge articles (kind 30818) on live Nostr relays.
 - Signer login with NIP-07.
-- Optional AI synthesis for signed-in users. When used, the question and retrieved article excerpts are sent to an AI service to generate the answer.
+- Optional AI synthesis for signed-in users.
 - Source attribution and provenance: each result links to its sources and contributors.
 
-It uses existing Nostr standards (NIP-01, NIP-07, NIP-54) and proposes no new protocol.
+Standards used: NIP-01, NIP-07, and NIP-54.
+
+## Privacy
+
+Reading sourced results requires no account and no AI. When a signed-in user requests AI synthesis, the question and retrieved article excerpts are sent to an AI service to generate the answer.
 
 ## Roadmap
 
@@ -32,9 +40,14 @@ npm install
 npm run dev
 ```
 
+Use a current Node.js LTS release. Other scripts:
+
+- `npm run build` creates a production build.
+- `npm test` runs the type check, lint, tests, and a build.
+
 ## Built with
 
-React, TypeScript, and Vite. Built with AI coding agents and the Shakespeare platform.
+React 19, TypeScript, Vite, Tailwind CSS, shadcn/ui and Radix UI components, TanStack Query, and the Nostr libraries Nostrify and nostr-tools. Built with AI coding agents and the Shakespeare platform.
 
 ## License
 
