@@ -10,7 +10,7 @@ Publishing on open networks does not make information easy to find, understand, 
 
 ## Status
 
-INTHENO is a working prototype. It currently runs on clearly labeled demonstration articles stored in the app. The next stage is to replace them with 100 sourced NIP-54 articles published on Nostr relays, add expert review, build multi-relay retrieval, and measure the results publicly.
+INTHENO is a working web app. It currently runs on clearly labeled demonstration articles stored in the app. The next stage is to replace them with 100 sourced NIP-54 articles published on Nostr relays, add expert review, build multi-relay retrieval, and measure the results publicly.
 
 ## What it does today
 
